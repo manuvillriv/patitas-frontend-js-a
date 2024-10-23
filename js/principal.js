@@ -6,27 +6,27 @@ window.addEventListener('load', function(){
 
     // recuperar nombre del usuario del localstorage
     const result = JSON.parse(this.localStorage.getItem('result'));
-    mostrarAlerta(`Bienvenido ${result.nombreUsuario}`);
+    mostrarAlerta(`Bienvenido ${result.nombreUsuario}`, msgSuccess);
 
     // Agregamos la accion al boton de cerrar sesión
     btnCerrarSesion.addEventListener('click', function(){
-        cerrarSesion()
+        cerrarSesion();
     });
 
 });
 
-function mostrarAlerta(mensaje) {
+function mostrarAlerta(mensaje, msgSuccess) {
     msgSuccess.innerHTML = mensaje;
     msgSuccess.style.display = 'block';
 }
 
-function ocultarAlerta() {
+function ocultarAlerta(msgSuccess) {
     msgSuccess.innerHTML = '';
     msgSuccess.style.display = 'none';
 }
 
 async function cerrarSesion() {
-    const url = 'http://localhost:8082/login/cerrar-sesion';
+    const url = 'http://localhost:8082/logout/salir-feign';
     const data = {
         tipoDocumento: localStorage.getItem('tipoDocumento'),
         numeroDocumento: localStorage.getItem('numeroDocumento')
@@ -42,8 +42,8 @@ async function cerrarSesion() {
         });
 
         if(!response.ok) {
-            mostrarAlerta('Error: Ocurrió un problema al cerrar sesión');
-            throw new Error(`Error: ${response.statusText}`);
+            mostrarAlerta('Error: Ocurrió un problema al cerrar sesión', msgSuccess);
+            throw new Error(`Error: ${response.status}`);
         }
 
         //validar respuesta
